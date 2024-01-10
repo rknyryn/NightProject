@@ -1,4 +1,5 @@
-﻿using NightProject.Library;
+﻿using System.Reflection;
+using NightProject.Library;
 using NightProject.Library.Extensions;
 using NightProject.Library.Models;
 
@@ -6,23 +7,23 @@ namespace NightProject.Console;
 
 public class Program
 {
-	public static void Main(string[] args)
-	{
+    public static void Main(string[] args)
+    {
         TestCase1();
         TestCase2();
         TestCase3();
 
         System.Console.WriteLine("All test cases are completed.");
         System.Console.ReadKey();
-	}
+    }
 
     /// <summary>
     /// Generate XML output from CSV input, filtered by City name=’Antalya’
     /// </summary>
     static void TestCase1()
     {
-        var cities = FileOperationParser.Parse<CityCsvModel>("./NightProject.Console/Resources/sample_data.csv");
-        FileOperationParser.Write("./NightProject.Console/Outputs/Test1/sample_data_copy.xml", cities.Where(w => w.CityName == "Antalya").ToList().ConvertToXmlModel());
+        var cities = FileOperationParser.Parse<CityCsvModel>(Path.Combine("Resources", "sample_data.csv"));
+        FileOperationParser.Write(Path.Combine("Outputs", "Test1", "sample_data_copy.xml"), cities.Where(w => w.CityName == "Antalya").ToList().ConvertToXmlModel());
     }
 
     /// <summary>
@@ -30,8 +31,8 @@ public class Program
     /// </summary>
     static void TestCase2()
     {
-        var cities = FileOperationParser.Parse<CityCsvModel>("./NightProject.Console/Resources/sample_data.csv");
-        FileOperationParser.Write("./NightProject.Console/Outputs/Test2/sample_data_copy.csv", cities.OrderBy(o => o.CityName).ThenBy(o => o.DistrictName).ToList());
+        var cities = FileOperationParser.Parse<CityCsvModel>(Path.Combine("Resources", "sample_data.csv"));
+        FileOperationParser.Write(Path.Combine("Outputs", "Test2", "sample_data_copy.csv"), cities.OrderBy(o => o.CityName).ThenBy(o => o.DistrictName).ToList());
     }
 
     /// <summary>
@@ -39,9 +40,9 @@ public class Program
     /// </summary>
     static void TestCase3()
     {
-        var cities = FileOperationParser.Parse<City>("./NightProject.Console/Resources/sample_data.xml");
+        var cities = FileOperationParser.Parse<City>(Path.Combine("Resources", "sample_data.xml"));
         var result = cities.Where(w => w.Name == "Ankara").ToList().ConvertToCsvModel().OrderByDescending(o => o.ZipCode).ToList();
-        FileOperationParser.Write("./NightProject.Console/Outputs/Test3/sample_data_copy.csv", result);
+        FileOperationParser.Write(Path.Combine("Outputs", "Test3", "sample_data_copy.csv"), result);
     }
 }
 
